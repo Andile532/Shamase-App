@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="icon" href="android-chrome-192x192.png" type="image/png">
+  <title>Shamase Transportation</title>
+</head>
+<body>
+  <main>
+    <div class="nav-holder">
+      <div class="logo-holder">
+        <img src="android-chrome-192x192.png" id="logo-image">
+      </div>
+      <h1>Shamase Transportation</h1>
+      <a href="#" class="membership"><i class="bi bi-arrow-left"></i>Back to website</a>
+    </div>
+    <div id="form-holder">
+      <div id="front-section">
+        <p id="start">LET'S GET YOU STARTED.</p>
+        <button id="bookNowBtn" type="button">Book Now</button>
+      </div>
+      <button id="closeModal" type="button">X</button>
+      <p id="fill-statement">Please fill all the required fields below!</p>
+      <form id="trip-form">
+        <section id="first-section">
+          <label for="name">Name:<input type="text" id="name" name="name" placeholder="Name here..." required></label>
+          <label for="number">Number:<input type="number" id="number" name="number" placeholder="Cell number here..." required></label>
+          <label for="date">Date of departure:<input type="date" id="date" name="date" required></label>
+          <label for="commuters">Number of passengers:<input type="number" id="commuters" name="commuters" placeholder="Number of passengers here..." required></label>
+          <button type="button" id="next">Next</button>
+        </section>
+        <section id="second-section" style="display:none;">
+          <label for="destination1">Destination1:<input type="text" id="destination1" name="destination1" placeholder="e.g Thokoza" required></label>
+          <label for="destination2">Destination2:<input type="text" id="destination2" name="destination2" placeholder="e.g Boksburg" required></label>
+          <textarea id="message" cols="20" rows="5" name="message" placeholder="Additional instructions.."></textarea>
+          <button type="button" id="previous">Previous</button>
+          <button type="submit" id="submitBtn">Submit</button>
+        </section>
+      </form>
+    </div>
+  </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('bookNowBtn').addEventListener('click', function() {
+        document.getElementById('front-section').style.display = 'none';
+        document.getElementById('first-section').style.display = 'block';
+        document.getElementById('closeModal').style.display = 'block';
+      });
+
+      document.getElementById('closeModal').addEventListener('click', function() {
+        document.getElementById('front-section').style.display = 'block';
+        document.getElementById('first-section').style.display = 'none';
+        document.getElementById('second-section').style.display = 'none';
+        document.getElementById('closeModal').style.display = 'none';
+      });
+
+      document.getElementById('next').addEventListener('click', function() {
+        document.getElementById('first-section').style.display = 'none';
+        document.getElementById('second-section').style.display = 'block';
+      });
+
+      document.getElementById('previous').addEventListener('click', function() {
+        document.getElementById('first-section').style.display = 'block';
+        document.getElementById('second-section').style.display = 'none';
+      });
+
+      document.getElementById('trip-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const form = document.getElementById('trip-form');
+        const formData = new FormData(form);
+
+        fetch('https://script.google.com/macros/s/AKfycbx2yCI_BIvf6ZP7BA_ILcy___Q47hz-N5xxWvKMu2KgoJJ5mZqQMXrio8rOWmGCBAZu/exec', {
+          method: 'POST',
+          body: new URLSearchParams(formData)
+        })
+        .then(response => response.text())
+        .then(data => {
+          if (data === 'Success') {
+            alert("Form submitted successfully! We'll call you back!");
+          } else {
+            alert('There was an error submitting your form. Please try again.');
+          }
+        })
+        .catch(error => {
+          alert('Error: ' + error);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
